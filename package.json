@@ -1,0 +1,9 @@
+{
+  "name": "mean-chat",
+  "version": "0.0.1",
+  "description": "Mean web chat app",
+  "dependencies": {
+    "express": "^4.14.1",
+    "socket.io": "^1.7.3"
+  }
+}

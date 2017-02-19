@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, .container-table {
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(rgb(52,138,199), rgb(116,116,191)) no-repeat;
+}
+
+.container-table {
+    display: table;
+}
+
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.messages {
+    height: 500px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding: 0px;
+}
+
+#message {
+    border-top-left-radius: 0px;
+}
+
+#send {
+    border-top-right-radius: 0px;
+}
+
+#messagelist li {
+    list-style-type: none;
+    text-align: left;
+    padding: 5px;
+}
+
+#messagelist li:nth-child(odd) {
+    background-color: #efefef;
+}
+
+#messagelist li:nth-child(even) {
+    background-color: #e2e2e2;
+}
