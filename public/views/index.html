@@ -24,9 +24,6 @@
             <form>
                 <div class="pre-scrollabe messages form-control">
                     <ul id="messagelist">
-                        <li>test</li>
-                        <li>test2</li>
-                        <li>test3</li>
                     </ul>
                 </div>
                 <div class="input-group message-group">
@@ -52,30 +49,44 @@
         });
 
         $("#join").click(function () {
-            var name = $("#nickname").val();
-            if (name != "") {
-                $("#nickname-div").detach();
-                $("#chat-div").show();
-                $("#message").focus();
-            }
+            setName();
         });
 
         $("#nickname").keypress(function (e) {
             if (e.which == 13) {
-                var name = $("#nickname").val();
-                if (name != "") {
-                    $("#nickname-div").detach();
-                    $("#chat-div").show();
-                    $("#message").focus();
-                }
+                setName();
             }
+        });
+
+        function setName() {
+            var name = $("#nickname").val();
+            if (name != "") {
+                socket.emit("join", name);
+                $("#nickname-div").detach();
+                $("#chat-div").show();
+                $("#message").focus();
+            }
+        }
+
+        socket.on("chat", function (who, msg) {
+            $("#messagelist").append("<li><b>" + who + "</b>: " + msg + "</li>");
+        });
+
+        $("#send").click(function () {
+            sendMessage();
         });
 
         $("#message").keypress(function (e) {
             if (e.which == 13) {
-                $("#message").val = '';
+                sendMessage();
             }
         });
+
+        function sendMessage() {
+            var msg = $("#message").val();
+            socket.emit("send", msg);
+            $("#message").val("");
+        }
     });
 </script>
 </body>

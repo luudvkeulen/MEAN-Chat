@@ -14,15 +14,18 @@ app.use('/css', express.static(__dirname + '/public/css'));
 io.on('connection', function (socket) {
     socket.on('join', function (name) {
         clients[socket.id] = name;
-        io.emit('chat message', name + ' has joined');
-        console.log(name + ' has joined');
+        io.emit('update', 'You have connected to the server');
+        io.sockets.emit("update", name + ' has joined the server');
     });
 
-    socket.on('chat message', function (msg) {
-        io.emit('chat message', msg);
+    socket.on("send", function (msg) {
+        io.sockets.emit("chat", clients[socket.id], msg);
+        console.log(clients[socket.id]);
     });
-    socket.on('disconnect', function () {
-        io.emit('chat message', 'An user disconnected');
+
+    socket.on("disconnect", function () {
+        io.sockets.emit("update", clients[socket.id] + ' has left the server');
+        delete clients[socket.id];
     });
 });
 
