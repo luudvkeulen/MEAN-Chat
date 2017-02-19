@@ -14,8 +14,9 @@ app.use('/css', express.static(__dirname + '/public/css'));
 io.on('connection', function (socket) {
     socket.on('join', function (name) {
         clients[socket.id] = name;
-        io.emit('update', 'You have connected to the server');
-        io.sockets.emit("update", name + ' has joined the server');
+        socket.emit('update', 'You have connected to the server');
+        socket.broadcast.emit("update", name + ' has joined the server');
+        io.sockets.emit("update-clients", clients);
     });
 
     socket.on("send", function (msg) {
@@ -25,6 +26,7 @@ io.on('connection', function (socket) {
     socket.on("disconnect", function () {
         io.sockets.emit("update", clients[socket.id] + ' has left the server');
         delete clients[socket.id];
+        io.sockets.emit("update-clients", clients);
     });
 });
 

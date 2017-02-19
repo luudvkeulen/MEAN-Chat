@@ -25,7 +25,15 @@ body {
     height: 500px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
     padding: 0px;
+}
+
+.clients {
+    height: 500px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 #message {
@@ -57,4 +65,13 @@ body {
 
 #messagelist li .update {
     color: red;
+}
+
+#clientslist {
+    height: 500px;
+    overflow-y: auto;
+}
+
+.nopadding {
+    padding: 0px;
 }
