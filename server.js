@@ -20,7 +20,6 @@ io.on('connection', function (socket) {
 
     socket.on("send", function (msg) {
         io.sockets.emit("chat", clients[socket.id], msg);
-        console.log(clients[socket.id]);
     });
 
     socket.on("disconnect", function () {

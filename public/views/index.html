@@ -22,7 +22,7 @@
         </div>
         <div id="chat-div" class="text-center col-md-8 col-md-offset-2">
             <form>
-                <div class="pre-scrollabe messages form-control">
+                <div class="messages form-control">
                     <ul id="messagelist">
                     </ul>
                 </div>
@@ -70,6 +70,7 @@
 
         socket.on("chat", function (who, msg) {
             $("#messagelist").append("<li><b>" + who + "</b>: " + msg + "</li>");
+            $('#messagelist').animate({scrollTop: $('#messagelist').prop("scrollHeight")}, 500);
         });
 
         $("#send").click(function () {
@@ -87,6 +88,11 @@
             socket.emit("send", msg);
             $("#message").val("");
         }
+
+        socket.on("update", function (msg) {
+            $("#messagelist").append("<li class='update'>" + msg + "</li>");
+            $('#messagelist').animate({scrollTop: $('#messagelist').prop("scrollHeight")}, 500);
+        });
     });
 </script>
 </body>

@@ -36,6 +36,11 @@ body {
     border-top-right-radius: 0px;
 }
 
+#messagelist {
+    height: 500px;
+    overflow-y: auto;
+}
+
 #messagelist li {
     list-style-type: none;
     text-align: left;
@@ -48,4 +53,8 @@ body {
 
 #messagelist li:nth-child(even) {
     background-color: #e2e2e2;
+}
+
+#messagelist li .update {
+    color: red;
 }
