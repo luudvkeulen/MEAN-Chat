@@ -19,7 +19,7 @@ $(document).ready(function () {
     });
 
     $("#room").keypress(function (e) {
-        if(e.which == 13) {
+        if (e.which == 13) {
             var roomname = $("#room").val();
             joinRoom(roomname);
         }
@@ -29,7 +29,7 @@ $(document).ready(function () {
         var roomname = $("#room").val();
         joinRoom(roomname);
     });
-    
+
     $("#create-room").click(function () {
         createRoom();
     });
@@ -46,7 +46,7 @@ $(document).ready(function () {
     }
 
     function joinRoom(roomname) {
-        if(roomname != "") {
+        if (roomname != "") {
             $("#room-div").detach();
             $("#chat-div").show();
             $("#message").focus();
@@ -99,12 +99,11 @@ $(document).ready(function () {
         $('#clientslist').animate({scrollTop: $('#clientslist').prop("scrollHeight")}, 500);
     });
 
-    function makeid(length)
-    {
+    function makeid(length) {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        for( var i=0; i < length; i++ )
+        for (var i = 0; i < length; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;
