@@ -19,11 +19,27 @@
                         <input id="join" type="button" class="btn btn-success input-lg" value="Join"/>
                     </span>
                 </div>
+                <p class="nicknamerror">Your name cannot be empty</p>
+            </form>
+        </div>
+
+        <!-- room div -->
+        <div id="room-div" class="text-center col-md-4 col-md-offset-4">
+            <form>
+                <div class="input-group">
+                    <input id="room" type="text" placeholder="Room id" class="form-control input-lg"/>
+                    <span class="input-group-btn">
+                        <input id="join-room" type="button" class="btn btn-success input-lg" value="Join"/>
+                    </span>
+                </div>
+                <p class="roomerror">Room id cannot be empty</p>
+                <input id="create-room" type="button" class="btn btn-warning input-lg" value="Create new room"/>
             </form>
         </div>
 
         <!-- Chat div -->
         <div id="chat-div" class="text-center col-md-8 col-md-offset-2">
+            <h1 class="roomid">Room id: </h1>
             <div class="col-md-8 nopadding">
                 <div class="messages form-control">
                     <ul id="messagelist">
@@ -49,72 +65,6 @@
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        var socket = io();
-        $("#chat-div").hide();
-        $("#nickname").focus();
-
-        $("form").submit(function (event) {
-            event.preventDefault();
-        });
-
-        $("#join").click(function () {
-            setName();
-        });
-
-        $("#nickname").keypress(function (e) {
-            if (e.which == 13) {
-                setName();
-            }
-        });
-
-        function setName() {
-            var name = $("#nickname").val();
-            if (name != "") {
-                socket.emit("join", name);
-                $("#nickname-div").detach();
-                $("#chat-div").show();
-                $("#message").focus();
-            }
-        }
-
-        socket.on("chat", function (who, msg) {
-            $("#messagelist").append("<li><b>" + who + "</b>: " + msg + "</li>");
-            $('#messagelist').animate({scrollTop: $('#messagelist').prop("scrollHeight")}, 500);
-        });
-
-        $("#send").click(function () {
-            sendMessage();
-        });
-
-        $("#message").keypress(function (e) {
-            if (e.which == 13) {
-                sendMessage();
-            }
-        });
-
-        function sendMessage() {
-            var msg = $("#message").val();
-            socket.emit("send", msg);
-            $("#message").val("");
-        }
-
-        socket.on("update", function (msg) {
-            $("#messagelist").append("<li class='update'>" + msg + "</li>");
-            $('#messagelist').animate({scrollTop: $('#messagelist').prop("scrollHeight")}, 500);
-        });
-
-        socket.on("update-clients", function (clients) {
-            $("#clientslist").empty();
-            $.each(clients, function (clientid, name) {
-                if (clientid != socket.id) {
-                    $('#clientslist').append("<li>" + name + "</li>");
-                }
-            });
-            $('#clientslist').animate({scrollTop: $('#clientslist').prop("scrollHeight")}, 500);
-        });
-    });
-</script>
+<script type="text/javascript" src="/js/index.js"></script>
 </body>
 </html>

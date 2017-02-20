@@ -75,3 +75,27 @@ body {
 .nopadding {
     padding: 0px;
 }
+
+#create-room {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.roomid {
+    color: #ffffff;
+    font-size: 52px;
+    font-weight: bold;
+}
+
+.nicknamerror {
+    display: none;
+    color: #ffffff;
+    margin-top: 5px;
+}
+
+.roomerror {
+    display: none;
+    color: #ffffff;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}

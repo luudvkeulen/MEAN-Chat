@@ -9,24 +9,43 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/views/index.html');
 });
 
-app.use('/css', express.static(__dirname + '/public/css'));
+app.use('/', express.static(__dirname + '/public'));
 
 io.on('connection', function (socket) {
-    socket.on('join', function (name) {
+    /*socket.on('join', function (name) {
         clients[socket.id] = name;
         socket.emit('update', 'You have connected to the server');
-        socket.broadcast.emit("update", name + ' has joined the server');
-        io.sockets.emit("update-clients", clients);
-    });
+        for(var room in socket.rooms) {
+            io.sockets.in(room).emit("update-clients", clients);
+            socket.in(room).broadcast("update", name + ' has joined the server');
+        }
+    });*/
 
     socket.on("send", function (msg) {
-        io.sockets.emit("chat", clients[socket.id], msg);
+        for(var room in socket.rooms) {
+            io.sockets.in(room).emit("chat", clients[room][socket.id], msg);
+        }
     });
 
     socket.on("disconnect", function () {
-        io.sockets.emit("update", clients[socket.id] + ' has left the server');
+        for(var room in socket.rooms) {
+            io.sockets.in(room).emit("update", clients[room][socket.id] + ' has left the server');
+            io.sockets.in(room).emit("update-clients", clients[room]);
+        }
         delete clients[socket.id];
-        io.sockets.emit("update-clients", clients);
+    });
+
+    socket.on("room", function (roomname, name) {
+        for(var room in socket.rooms) {
+            socket.leave(room);
+        }
+        socket.join(roomname);
+        if(clients[roomname] == null) {
+            clients[roomname] = {};
+        }
+        clients[roomname][socket.id] = name;
+        socket.in(roomname).emit("update", name + " has joined the server");
+        io.sockets.in(roomname).emit("update-clients", clients[roomname]);
     });
 });
 
