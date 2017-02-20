@@ -41,6 +41,12 @@ io.on('connection', function (socket) {
         socket.in(roomname).emit("update", name + " has joined the server");
         io.sockets.in(roomname).emit("update-clients", clients[roomname]);
     });
+
+    socket.on("typing", function (typing) {
+        for (var room in socket.rooms) {
+            io.sockets.in(room).emit("typing", clients[room][socket.id], typing);
+        }
+    });
 });
 
 http.listen(80, function () {

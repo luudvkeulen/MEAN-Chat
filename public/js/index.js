@@ -78,6 +78,15 @@ $(document).ready(function () {
         }
     });
 
+    $("#message").on('input', function (e) {
+        var text = $("#message").val();
+        if(text != "") {
+            socket.emit("typing", true);
+        } else {
+            socket.emit("typing", false);
+        }
+    });
+
     function sendMessage() {
         var msg = $("#message").val();
         socket.emit("send", msg);
@@ -97,6 +106,15 @@ $(document).ready(function () {
             }
         });
         $('#clientslist').animate({scrollTop: $('#clientslist').prop("scrollHeight")}, 500);
+    });
+
+    socket.on("typing", function (client, typing) {
+        if(typing) {
+            $("#typing").text(client + " is typing");
+        } else {
+            $("#typing").text('');
+        }
+
     });
 
     function makeid(length) {
