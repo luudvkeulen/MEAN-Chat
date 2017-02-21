@@ -60,6 +60,6 @@ function containsObject(obj, list) {
     return false;
 }
 
-http.listen(80, function () {
+http.listen(process.env.PORT || 80, function () {
     console.log("Listening...");
 });
