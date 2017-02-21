@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var socket = io();
-    $("#chat-div").hide();
-    $("#room-div").hide();
+
     $("#nickname").focus();
 
     $("form").submit(function (event) {
@@ -27,7 +26,7 @@ $(document).ready(function () {
 
     $("#join-room").click(function () {
         var roomname = $("#room").val();
-        joinRoom(roomname);
+        joinRoom(roomname, false);
     });
 
     $("#create-room").click(function () {
@@ -45,14 +44,10 @@ $(document).ready(function () {
         }
     }
 
-    function joinRoom(roomname) {
+    function joinRoom(roomname, create) {
         if (roomname != "") {
-            $("#room-div").detach();
-            $("#chat-div").show();
-            $("#message").focus();
             var name = $("#nickname").val();
-            socket.emit("room", roomname, name);
-            $(".roomid").append(roomname);
+            socket.emit("room", roomname, name, create);
         } else {
             $(".roomerror").css("display", "block");
         }
@@ -60,7 +55,7 @@ $(document).ready(function () {
 
     function createRoom() {
         var roomname = makeid(12);
-        joinRoom(roomname);
+        joinRoom(roomname, true);
     }
 
     socket.on("chat", function (who, msg) {
@@ -78,18 +73,10 @@ $(document).ready(function () {
         }
     });
 
-    $("#message").on('input', function (e) {
-        var text = $("#message").val();
-        if(text != "") {
-            socket.emit("typing", true);
-        } else {
-            socket.emit("typing", false);
-        }
-    });
-
     function sendMessage() {
         var msg = $("#message").val();
         socket.emit("send", msg);
+        socket.emit("typing", false);
         $("#message").val("");
     }
 
@@ -107,14 +94,16 @@ $(document).ready(function () {
         });
         $('#clientslist').animate({scrollTop: $('#clientslist').prop("scrollHeight")}, 500);
     });
+    
+    socket.on("roomnotfound", function () {
+        $(".roomnotfound").css("display", "block");
+    });
 
-    socket.on("typing", function (client, typing) {
-        if(typing) {
-            $("#typing").text(client + " is typing");
-        } else {
-            $("#typing").text('');
-        }
-
+    socket.on("joinroom", function (roomname) {
+        $("#room-div").detach();
+        $("#chat-div").show();
+        $("#message").focus();
+        $(".roomid").append(roomname);
     });
 
     function makeid(length) {

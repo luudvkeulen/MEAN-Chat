@@ -99,3 +99,18 @@ body {
     margin-top: 5px;
     margin-bottom: 0px;
 }
+
+.roomnotfound {
+    display: none;
+    color: #ffffff;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+#chat-div {
+    display: none;
+}
+
+#room-div {
+    display: none;
+}

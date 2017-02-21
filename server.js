@@ -20,7 +20,6 @@ io.on('connection', function (socket) {
 
     socket.on("disconnect", function () {
         for(var room in clients) {
-
             if(typeof clients[room][socket.id] != 'undefined') {
                 io.sockets.in(room).emit("update", clients[room][socket.id] + ' has left the server');
                 delete clients[room][socket.id];
@@ -29,25 +28,37 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on("room", function (roomname, name) {
+    socket.on("room", function (roomname, name, create) {
         for (var room in socket.rooms) {
             socket.leave(room);
         }
-        socket.join(roomname);
+
+        if(!create && containsObject(roomname, io.sockets.adapter.rooms) === false) {
+            socket.emit("roomnotfound");
+            return;
+        }
+            socket.join(roomname);
+
         if (clients[roomname] == null) {
             clients[roomname] = {};
         }
+
+        socket.emit("joinroom", roomname);
         clients[roomname][socket.id] = name;
         socket.in(roomname).emit("update", name + " has joined the server");
         io.sockets.in(roomname).emit("update-clients", clients[roomname]);
     });
-
-    socket.on("typing", function (typing) {
-        for (var room in socket.rooms) {
-            io.sockets.in(room).emit("typing", clients[room][socket.id], typing);
-        }
-    });
 });
+
+function containsObject(obj, list) {
+    for (var object in list) {
+        if(object === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 http.listen(80, function () {
     console.log("Listening...");
