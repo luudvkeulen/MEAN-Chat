@@ -36,6 +36,7 @@ $(document).ready(function () {
     function setName() {
         var name = $("#nickname").val();
         if (name != "") {
+            socket.emit("checkname", name);
             $("#nickname-div").hide();
             $("#room-div").show();
             $("#room").focus();

@@ -19,8 +19,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on("disconnect", function () {
-        for(var room in clients) {
-            if(typeof clients[room][socket.id] != 'undefined') {
+        for (var room in clients) {
+            if (typeof clients[room][socket.id] != 'undefined') {
                 io.sockets.in(room).emit("update", clients[room][socket.id] + ' has left the server');
                 delete clients[room][socket.id];
                 io.sockets.in(room).emit("update-clients", clients[room]);
@@ -33,11 +33,12 @@ io.on('connection', function (socket) {
             socket.leave(room);
         }
 
-        if(!create && containsObject(roomname, io.sockets.adapter.rooms) === false) {
+        if (!create && containsObject(roomname, io.sockets.adapter.rooms) === false) {
             socket.emit("roomnotfound");
             return;
         }
-            socket.join(roomname);
+
+        socket.join(roomname);
 
         if (clients[roomname] == null) {
             clients[roomname] = {};
@@ -48,17 +49,36 @@ io.on('connection', function (socket) {
         socket.in(roomname).emit("update", name + " has joined the server");
         io.sockets.in(roomname).emit("update-clients", clients[roomname]);
     });
+
+    socket.on("checkname", function (name) {
+        //console.log("name exists: " + nameExists(name));
+    });
 });
 
 function containsObject(obj, list) {
     for (var object in list) {
-        if(object === obj) {
+        if (object === obj) {
             return true;
         }
     }
 
     return false;
 }
+
+function nameExists(newname) {
+    for(var client in clients) {
+        for(var room in io.sockets.adapter.rooms) {
+            for(var object in clients[room]) {
+                if(clients[room][object] === newname) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 
 http.listen(process.env.PORT || 80, function () {
     console.log("Listening...");
